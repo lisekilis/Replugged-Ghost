@@ -1,8 +1,13 @@
 import { Injector, Logger, common } from "replugged";
-
 const inject = new Injector();
 const logger = Logger.plugin("Replugged-Ghost");
-
+interface HTTPResponse<T = Record<string, unknown>> {
+  body: T;
+  headers: Record<string, string>;
+  ok: boolean;
+  status: number;
+  text: string;
+}
 function getRandomContent(): string {
   const usr = common.users.getCurrentUser();
   const content: string[] = [
@@ -37,14 +42,16 @@ export async function start(): Promise<void> {
       },
     ],
     executor: async (interaction) => {
-      const user = interaction.getValue("WHO?")!;
+      const user = interaction.getValue("Who?")!;
       if (user) {
         const channelID = common.channels.getChannelId()!;
         let message = {
           content: `<@${user}>`,
           validNonShortcutEmojis: [],
         };
-        const response = await common.messages.sendMessage(channelID, message);
+        const response = (await common.messages.sendMessage(channelID, message)) as HTTPResponse<{
+          id: string;
+        }>;
         logger.log(response);
         message.content = getRandomContent();
         void common.messages.editMessage(channelID, response.body.id, message);
