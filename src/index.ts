@@ -1,7 +1,5 @@
-import { Injector, Logger, common, types } from "replugged";
-import { Message } from "replugged/dist/renderer/modules/common/i18n";
+import { Injector, Logger, common } from "replugged";
 
-const { ApplicationCommandOptionType } = types;
 const inject = new Injector();
 const logger = Logger.plugin("Replugged-Ghost");
 
@@ -33,7 +31,7 @@ export async function start(): Promise<void> {
     description: "Allows you to ghost ping someone",
     options: [
       {
-        name: "WHO?",
+        name: "Who?",
         description: "Who doo you want to ping?",
         type: 6,
       },
