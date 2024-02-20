@@ -7,7 +7,7 @@
     "discordID": "396990201790201857",
     "github": "lisekilis"
   },
-  "version": "0.0.0",
+  "version": "1.0.0",
   "updater": {
     "type": "github",
     "id": "lisekilis/Replugged-Ghost"
@@ -16,5 +16,7 @@
   "type": "replugged-plugin",
   "renderer": "src/index.ts",
   "source": "https://github.com/lisekilis/Replugged-Ghost",
-  "image": ["https://i.imgur.com/14CNs3a.png?CHANGE-THIS-URL"]
+  "image": [
+    "https://i.imgur.com/14CNs3a.png?CHANGE-THIS-URL"
+  ]
 }
