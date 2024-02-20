@@ -30,6 +30,7 @@ function getRandomContent(): string {
     return content[Math.floor(Math.random() * 8)];
   } else return content[Math.floor(Math.random() * content.length - 1)];
 }
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function start(): Promise<void> {
   inject.utils.registerSlashCommand({
     name: "ghostping",
