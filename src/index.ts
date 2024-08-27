@@ -1,6 +1,10 @@
-import { Injector, Logger, common } from "replugged";
+import { Injector, Logger, common, components, types, util } from "replugged";
+import { cfg } from "./config";
 const inject = new Injector();
+const { ContextMenuTypes } = types;
+
 const logger = Logger.plugin("Replugged-Ghost");
+
 interface HTTPResponse<T = Record<string, unknown>> {
   body: T;
   headers: Record<string, string>;
@@ -32,6 +36,26 @@ function getRandomContent(): string {
 }
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function start(): Promise<void> {
+  inject.utils.addMenuItem(ContextMenuTypes.TextareaContext, () => {
+    const silence = cfg.get("silence", false);
+    const item = {
+      id: "messageSilenceToggle",
+      label: `Silence Messages`,
+      checked: silence,
+      action: () => {
+        cfg.set("silence", !silence);
+        util.forceUpdateElement("[id=textarea-context]");
+      },
+      type: components.ContextMenu.MenuCheckboxItem,
+    };
+    return item;
+  });
+  inject.before(common.messages, "sendMessage", (args) => {
+    if (args[1].content.indexOf("@silent") != 1 && cfg.get("silence", false)) {
+      args[1].content = `@silent ${args[1].content}`;
+    }
+    return args;
+  });
   inject.utils.registerSlashCommand({
     name: "ghostping",
     description: "Allows you to ghost ping someone",
@@ -50,10 +74,9 @@ export async function start(): Promise<void> {
           content: `<@${user}>`,
           validNonShortcutEmojis: [],
         };
-        const response = (await common.messages.sendMessage(channelID, message)) as HTTPResponse<{
-          id: string;
-        }>;
+        const response = await common.messages.sendMessage(channelID, message);
         logger.log(response);
+        logger.log(common.messages.getMessage(channelID, response.body.id));
         message.content = getRandomContent();
         void common.messages.editMessage(channelID, response.body.id, message);
         void common.messages.deleteMessage(channelID, response.body.id);
