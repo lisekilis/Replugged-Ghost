@@ -7,7 +7,7 @@
     "discordID": "396990201790201857",
     "github": "lisekilis"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "updater": {
     "type": "github",
     "id": "lisekilis/Replugged-Ghost"
