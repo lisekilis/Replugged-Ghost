@@ -74,7 +74,9 @@ export async function start(): Promise<void> {
           content: `<@${user}>`,
           validNonShortcutEmojis: [],
         };
-        const response = await common.messages.sendMessage(channelID, message);
+        const response = (await common.messages.sendMessage(channelID, message)) as HTTPResponse<{
+          id: string;
+        }>;
         logger.log(response);
         logger.log(common.messages.getMessage(channelID, response.body.id));
         message.content = getRandomContent();
